@@ -1,0 +1,14 @@
+{
+  "author": "monavia",
+  "name": "paperplane-lavalink-status",
+  "version": "1.0.0",
+  "description": "Discord bot untuk monitor status Lavalink nodes",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7"
+  }
+}
