@@ -5,45 +5,40 @@
 
 const nodes = [
   {
-    name: "🟢 Localhost",
+    name: "Localhost",
     host: "localhost",
     port: 2333,
     password: "youshallnotpass",
     secure: false,
-    description: "Lavalink lokal"
   },
   {
-    name: "🔵 Trinium 4333",
-    host: "lavalink.triniumhost.com",
-    port: 4333,
-    password: "free",
-    secure: false,
-    description: "Hosted by @TriniumHost"
-  },
-  {
-    name: "🟣 Trinium 2333",
-    host: "lavalink.triniumhost.com",
+    name: "Node 2",
+    host: "",
     port: 2333,
-    password: "kirito",
+    password: "",
     secure: false,
-    description: "Hosted by @TriniumHost"
   },
   {
-    name: "🟠 Serenetia",
-    host: "lavalinkv4.serenetia.com",
-    port: 80,
-    password: "https://seretia.link/discord",
+    name: "Node 3",
+    host: "",
+    port: 2333,
+    password: "",
     secure: false,
-    description: "Hosted by @Amane & AjieDev"
   },
   {
-    name: "🔴 Jirayu",
-    host: "lavalink.jirayu.net",
-    port: 13592,
-    password: "youshallnotpass",
+    name: "Node 4",
+    host: "",
+    port: 2333,
+    password: "",
     secure: false,
-    description: "Hosted by @Jirayu"
-  }
+  },
+  {
+    name: "Node 5",
+    host: "",
+    port: 2333,
+    password: "",
+    secure: false,
+  },
 ];
 
 module.exports = nodes;

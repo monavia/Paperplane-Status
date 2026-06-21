@@ -160,7 +160,7 @@ async function updateStatus() {
 
   const embed = buildEmbed(results);
   const channel = client.channels.cache.get(process.env.CHANNEL_ID);
-  if (!channel) return;
+  if (!channel) { console.log(`Channel ${process.env.CHANNEL_ID} tidak ditemukan`); return; }
 
   if (!statusMessage) {
     const messages = await channel.messages.fetch({ limit: 10 });
@@ -172,8 +172,10 @@ async function updateStatus() {
   try {
     if (statusMessage) {
       await statusMessage.edit({ embeds: [embed] });
+      console.log(`Pesan embed berhasil diupdate`);
     } else {
       statusMessage = await channel.send({ embeds: [embed] });
+      console.log(`Pesan embed berhasil dikirim`);
     }
   } catch {
     statusMessage = null;
