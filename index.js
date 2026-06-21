@@ -99,7 +99,7 @@ function buildEmbed(results) {
         name: ` `,
         value: [
           `Status : Offline 🔴`,
-          `Node: ${node.name.replace(/^[^\s]+\s/, "")}`,
+          `Node: ${node.name}`,
           `Error: ${error || "Unknown"}`,
           `Host: ${node.host}:${node.port}`,
           `Ping: ${ping}ms`,
@@ -114,7 +114,7 @@ function buildEmbed(results) {
 
     const fields = [
       `Status : Online 🟢`,
-      `Node: ${node.name.replace(/^[^\s]+\s/, "")}`,
+      `Node: ${node.name}`,
       `Host: ${node.host}:${node.port}`,
       isLocal ? `Player: ${r.players}` : null,
       isLocal ? `Playing Players: ${r.playingPlayers}` : null,
