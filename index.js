@@ -33,40 +33,42 @@ function formatLoad(val) {
 
 async function checkNode(node) {
   const protocol = node.secure ? "https" : "http";
-  const url = `${protocol}://${node.host}:${node.port}/v4/info`;
+  const base = `${protocol}://${node.host}:${node.port}`;
   const start = Date.now();
+  const headers = { Authorization: node.password };
 
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { Authorization: node.password },
-    });
+    const [infoRes, statsRes] = await Promise.all([
+      fetch(`${base}/v4/info`, { signal: controller.signal, headers }),
+      fetch(`${base}/v4/stats`, { signal: controller.signal, headers }).catch(() => null),
+    ]);
     clearTimeout(timeout);
 
-    if (!res.ok) {
-      return { node, online: false, ping: Date.now() - start, error: `HTTP ${res.status}` };
+    if (!infoRes.ok) {
+      return { node, online: false, ping: Date.now() - start, error: `HTTP ${infoRes.status}` };
     }
 
-    const d = await res.json();
+    const info = await infoRes.json();
+    const stats = statsRes?.ok ? await statsRes.json() : {};
 
     return {
       node,
       online: true,
       ping: Date.now() - start,
-      version: parseVersion(d.version),
-      players: d.stats?.players ?? 0,
-      playingPlayers: d.stats?.playingPlayers ?? 0,
-      uptime: d.stats?.uptime ?? 0,
-      cores: d.stats?.cpu?.cores ?? 0,
-      systemLoad: d.stats?.cpu?.systemLoad ?? 0,
-      lavalinkLoad: d.stats?.cpu?.lavalinkLoad ?? 0,
-      memoryFree: d.stats?.memory?.free ?? 0,
-      memoryUsed: d.stats?.memory?.used ?? 0,
-      memoryReservable: d.stats?.memory?.reservable ?? 0,
-      memoryAllocated: d.stats?.memory?.allocated ?? 0,
+      version: parseVersion(info.version),
+      players: stats.players ?? 0,
+      playingPlayers: stats.playingPlayers ?? 0,
+      uptime: stats.uptime ?? 0,
+      cores: stats.cpu?.cores ?? 0,
+      systemLoad: stats.cpu?.systemLoad ?? 0,
+      lavalinkLoad: stats.cpu?.lavalinkLoad ?? 0,
+      memoryFree: stats.memory?.free ?? 0,
+      memoryUsed: stats.memory?.used ?? 0,
+      memoryReservable: stats.memory?.reservable ?? 0,
+      memoryAllocated: stats.memory?.allocated ?? 0,
     };
   } catch (err) {
     if (err.name === "AbortError") {
