@@ -100,11 +100,9 @@ function buildEmbed(results) {
       embed.addFields({
         name: ` `,
         value: [
-          `Status : Offline 🔴`,
+          `Status: 🔴`,
           `Node: ${node.name}`,
           `Error: ${error || "Unknown"}`,
-          `Host: ${node.host}:${node.port}`,
-          `Ping: ${ping}ms`,
           `----------------------------`,
         ].join("\n"),
         inline: false,
@@ -112,20 +110,17 @@ function buildEmbed(results) {
       continue;
     }
 
-    const isLocal = node.host === "localhost";
-
     const fields = [
-      `Status : Online 🟢`,
+      `Status: 🟢`,
       `Node: ${node.name}`,
-      `Host: ${node.host}:${node.port}`,
-      isLocal ? `Player: ${r.players}` : null,
-      isLocal ? `Playing Players: ${r.playingPlayers}` : null,
-      isLocal ? `Uptime: ${formatUptime(r.uptime)}` : null,
-      isLocal ? `` : null,
-      isLocal ? `CPU` : null,
-      isLocal ? `Cores: ${r.cores}` : null,
-      isLocal ? `System Load: ${formatLoad(r.systemLoad)}` : null,
-      isLocal ? `Lavalink Load: ${formatLoad(r.lavalinkLoad)}` : null,
+      `Player: ${r.players}`,
+      `Playing Players: ${r.playingPlayers}`,
+      `Uptime: ${formatUptime(r.uptime)}`,
+      ``,
+      `CPU`,
+      `Cores: ${r.cores}`,
+      `System Load: ${formatLoad(r.systemLoad)}`,
+      `Lavalink Load: ${formatLoad(r.lavalinkLoad)}`,
       `----------------------------`,
     ].filter(Boolean);
 
