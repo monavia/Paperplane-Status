@@ -91,8 +91,6 @@ function buildEmbed(results) {
     .setTimestamp();
 
   const mem = process.memoryUsage();
-  const cpus = os.cpus();
-  const cpuInfo = cpus.length > 0 ? cpus[0] : null;
 
   for (const r of results) {
     const { node, online, ping, error } = r;
@@ -148,9 +146,6 @@ function buildEmbed(results) {
     `Heap Used     :: ${formatMB(mem.heapUsed)} mb`,
     `External      :: ${formatMB(mem.external)} mb`,
     `Array Buffer  :: ${formatMB(mem.arrayBuffers || 0)} mb`,
-    cpuInfo ? `CPU Model     :: ${cpuInfo.model}` : null,
-    `Cores         :: ${cpus.length}`,
-    cpuInfo ? `Speed         :: ${cpuInfo.speed}Mhz` : null,
     `Platform      :: ${os.platform()}`,
     `PID           :: ${process.pid}`,
     `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`,
