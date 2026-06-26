@@ -96,6 +96,8 @@ function buildEmbed(results) {
   for (const r of results) {
     const { node, online, ping, error } = r;
 
+    if (!node.host) continue;
+
     if (!online) {
       embed.addFields({
         name: ` `,
