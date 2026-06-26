@@ -131,6 +131,8 @@ function buildEmbed(results) {
   }
 
   const gpu = getGpuInfo();
+  const cpuTemp = getCpuTemp();
+  const cpuLoad = os.loadavg()[0].toFixed(2);
 
   const systemLines = [
     `Total Memory  :: ${formatMB(os.totalmem())} mb`,
@@ -138,6 +140,9 @@ function buildEmbed(results) {
     gpu ? `VRAM Total    :: ${gpu.total} mb` : null,
     gpu ? `VRAM Free     :: ${gpu.free} mb` : null,
     gpu ? `GPU Load      :: ${gpu.load}%` : null,
+    gpu ? `GPU Temp      :: ${gpu.temp}°C` : null,
+    cpuTemp ? `CPU Temp      :: ${cpuTemp}°C` : null,
+    `CPU Load      :: ${cpuLoad}%`,
     `RSS           :: ${formatMB(mem.rss)} mb`,
     `Heap Total    :: ${formatMB(mem.heapTotal)} mb`,
     `Heap Used     :: ${formatMB(mem.heapUsed)} mb`,
@@ -162,9 +167,18 @@ function formatMB(bytes) {
 
 function getGpuInfo() {
   try {
-    const out = execSync("nvidia-smi --query-gpu=memory.total,memory.free,utilization.gpu --format=csv,noheader,nounits", { timeout: 5000 }).toString().trim();
-    const [total, free, load] = out.split(",").map((s) => s.trim());
-    return { total, free, load };
+    const out = execSync("nvidia-smi --query-gpu=memory.total,memory.free,utilization.gpu,temperature.gpu --format=csv,noheader,nounits", { timeout: 5000 }).toString().trim();
+    const [total, free, load, temp] = out.split(",").map((s) => s.trim());
+    return { total, free, load, temp };
+  } catch {
+    return null;
+  }
+}
+
+function getCpuTemp() {
+  try {
+    const raw = execSync("cat /sys/class/thermal/thermal_zone0/temp", { timeout: 3000 }).toString().trim();
+    return (parseInt(raw) / 1000).toFixed(0);
   } catch {
     return null;
   }
