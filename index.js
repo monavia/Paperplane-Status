@@ -5,6 +5,7 @@
 
 require("dotenv").config();
 const os = require("os");
+const { execSync } = require("child_process");
 const { Client, GatewayIntentBits, EmbedBuilder, ActivityType } = require("discord.js");
 const nodes = require("./nodes");
 
@@ -129,9 +130,14 @@ function buildEmbed(results) {
     embed.addFields({ name: ` `, value: fields.join("\n"), inline: false });
   }
 
+  const gpu = getGpuInfo();
+
   const systemLines = [
     `Total Memory  :: ${formatMB(os.totalmem())} mb`,
     `Free Memory   :: ${formatMB(os.freemem())} mb`,
+    gpu ? `VRAM Total    :: ${gpu.total} mb` : null,
+    gpu ? `VRAM Free     :: ${gpu.free} mb` : null,
+    gpu ? `GPU Load      :: ${gpu.load}%` : null,
     `RSS           :: ${formatMB(mem.rss)} mb`,
     `Heap Total    :: ${formatMB(mem.heapTotal)} mb`,
     `Heap Used     :: ${formatMB(mem.heapUsed)} mb`,
@@ -152,6 +158,16 @@ function buildEmbed(results) {
 
 function formatMB(bytes) {
   return (bytes / 1024 / 1024).toFixed(0);
+}
+
+function getGpuInfo() {
+  try {
+    const out = execSync("nvidia-smi --query-gpu=memory.total,memory.free,utilization.gpu --format=csv,noheader,nounits", { timeout: 5000 }).toString().trim();
+    const [total, free, load] = out.split(",").map((s) => s.trim());
+    return { total, free, load };
+  } catch {
+    return null;
+  }
 }
 
 async function updateStatus() {
