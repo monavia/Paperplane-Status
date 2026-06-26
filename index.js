@@ -167,7 +167,7 @@ function getGpuInfo() {
 
 function getCpuTemp() {
   try {
-    const raw = execSync("cat /sys/class/thermal/thermal_zone0/temp", { timeout: 3000 }).toString().trim();
+    const raw = execSync("cat /sys/class/hwmon/hwmon0/temp1_input", { timeout: 3000 }).toString().trim();
     return (parseInt(raw) / 1000).toFixed(0);
   } catch {
     return null;
