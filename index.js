@@ -117,11 +117,6 @@ function buildEmbed(results) {
       `Player: ${r.players}`,
       `Playing Players: ${r.playingPlayers}`,
       `Uptime: ${formatUptime(r.uptime)}`,
-      ``,
-      `CPU`,
-      `Cores: ${r.cores}`,
-      `System Load: ${formatLoad(r.systemLoad)}`,
-      `Lavalink Load: ${formatLoad(r.lavalinkLoad)}`,
       `----------------------------`,
     ].filter(Boolean);
 
